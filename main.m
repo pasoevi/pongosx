@@ -60,15 +60,6 @@ int main(int  argc, char** argv){
 
   
   
-  
-  
-  Test *t = [[Test alloc] init];
-  
-  printf("square: %d", [t getSquare:4]);
-  
-  
-  
-  
 
   /* Create the enemy! */
   Player enemy;

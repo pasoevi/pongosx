@@ -1,5 +1,5 @@
 /*
-dfdsf
+
   Copyright (C) 2014 Sergi Pasoev.
 
   This pragram is free software: you can redistribute it and/or modify

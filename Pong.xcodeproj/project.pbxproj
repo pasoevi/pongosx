@@ -390,7 +390,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\\\"$(SRCROOT)/SDL/lib\\\"",
-					/Users/sandroebanoidze/Desktop/Pongosx/SDL/lib,
+					/Users/sandroebanoidze/Projects/pongosx/SDL/lib,
 					/Users/sergi/Projects/pongosx/SDL/lib,
 				);
 				PRODUCT_NAME = Pong;
@@ -409,7 +409,7 @@
 					"$(inherited)",
 					"\\\"$(SRCROOT)/SDL/lib\\\"",
 					/Users/sergi/Projects/pongosx/SDL/lib,
-					/Users/sandroebanoidze/Desktop/Pongosx/SDL/lib,
+					/Users/sandroebanoidze/Projects/pongosx/SDL/lib,
 				);
 				PRODUCT_NAME = Pong;
 			};

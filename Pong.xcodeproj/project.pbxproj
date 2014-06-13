@@ -17,7 +17,6 @@
 		3D0E8988194B46A300569D0F /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D0E8984194B46A300569D0F /* libSDL2.a */; };
 		3D0E898D194B496100569D0F /* ball.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D0E8989194B496100569D0F /* ball.c */; };
 		3D0E898E194B496100569D0F /* enemy.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D0E898B194B496100569D0F /* enemy.c */; };
-		3D0E8992194B4D0100569D0F /* Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0E8991194B4D0100569D0F /* Test.m */; };
 		3D0E899B194B4EFC00569D0F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0E899A194B4EFC00569D0F /* main.m */; };
 		FD779EDE0E26BA1200F39101 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD779EDD0E26BA1200F39101 /* CoreAudio.framework */; };
 		FD77A07D0E26BD8C00F39101 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FD77A07C0E26BD8C00F39101 /* Icon.png */; };
@@ -116,8 +115,6 @@
 		3D0E898B194B496100569D0F /* enemy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = enemy.c; sourceTree = "<group>"; };
 		3D0E898C194B496100569D0F /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
 		3D0E898F194B49BB00569D0F /* pong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pong.h; sourceTree = "<group>"; };
-		3D0E8990194B4D0100569D0F /* Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test.h; sourceTree = "<group>"; };
-		3D0E8991194B4D0100569D0F /* Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test.m; sourceTree = "<group>"; };
 		3D0E899A194B4EFC00569D0F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD779EDD0E26BA1200F39101 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -175,8 +172,6 @@
 				3D0E898A194B496100569D0F /* ball.h */,
 				3D0E898B194B496100569D0F /* enemy.c */,
 				3D0E898C194B496100569D0F /* player.h */,
-				3D0E8990194B4D0100569D0F /* Test.h */,
-				3D0E8991194B4D0100569D0F /* Test.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -375,7 +370,6 @@
 			files = (
 				3D0E899B194B4EFC00569D0F /* main.m in Sources */,
 				3D0E898E194B496100569D0F /* enemy.c in Sources */,
-				3D0E8992194B4D0100569D0F /* Test.m in Sources */,
 				3D0E898D194B496100569D0F /* ball.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

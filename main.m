@@ -1,5 +1,5 @@
 /*
-
+dfdsf
   Copyright (C) 2014 Sergi Pasoev.
 
   This pragram is free software: you can redistribute it and/or modify
@@ -58,15 +58,6 @@ int main(int  argc, char** argv){
   player.hits = 0;
   player.score = 0;
 
-  
-  
-  
-  
-  Test *t = [[Test alloc] init];
-  
-  printf("square: %d", [t getSquare:4]);
-  
-  
   
   
 

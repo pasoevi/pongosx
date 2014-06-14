@@ -19,7 +19,7 @@
 
 */
 #define PLATE_WIDTH 140
-#define PLATE_HEIGHT 7
+#define PLATE_HEIGHT 14
 
 typedef struct {
   float x, y;

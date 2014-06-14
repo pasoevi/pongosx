@@ -33,12 +33,8 @@ void think(Player *enemy, int ballX, int winWidth){
   }
 }
 
-void player2(Player *enemy, char *move){
-    
-    
+void player2(Player *enemy, char *move){    
     float newX;
-    
-    
     
     sscanf(move, "%f", &newX);
     

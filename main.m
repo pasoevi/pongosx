@@ -77,10 +77,6 @@ int HandleThread(void *arg)
 
 {
     
-    
-    
-    
-    
     while (running) {
         
         
@@ -89,11 +85,14 @@ int HandleThread(void *arg)
         
         
         
-        sprintf(buff, "%f", ((Player *)arg)->x);
+        sprintf(buff, "%.2f\0", ((Player *)arg)->x);
         
         
         
         say(listener_d, buff);
+        // say(listener_d, "180.00\0");
+        SDL_Delay(100);
+        
         
         
         
@@ -269,7 +268,7 @@ void update(Player *player, Player *enemy,  Ball *ball){
     
     
     
-    //printf("data: %s \n", buf);
+    printf("data: %s \n", buf);
     
     
     

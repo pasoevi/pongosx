@@ -39,6 +39,8 @@ void player2(Player *enemy, char *move){
     
     sscanf(move, "%f", &newX);
 
+    //printf("data: %s \n", move);
+
     enemy->x = newX;
 }
 

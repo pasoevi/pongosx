@@ -29,7 +29,7 @@
 //#define WINDOW_WIDTH 320
 //#define WINDOW_HEIGHT 480
 #define FPS 70
-#define INITIAL_SPEED 1.1
+#define INITIAL_SPEED 1.5
 #define REQUIRED_HITS 5
 
 #define SCORE_PER_HIT 10
@@ -64,9 +64,9 @@ int HandleThread(void *arg)
         
         char buff[255];
         
-        sprintf(buff, "%f", ((Player *)arg)->x);
+        sprintf(buff, "%.2f\0", ((Player *)arg)->x);
         
-        SDL_Delay(500);
+        SDL_Delay(5);
         
         say(connect_d, buff);
         
@@ -209,7 +209,7 @@ int main(int  argc, char** argv){
   /* Create the enemy! */
   Player enemy;
   enemy.x = window_width / 2 - PLATE_WIDTH;
-  enemy.y = 0;
+  enemy.y = PLAYER_OFFSET;
   enemy.hits = 0;
   
   Ball ball;
@@ -323,11 +323,11 @@ void update(Player *player, Player *enemy,  Ball *ball){
     char buf[255];
     read_in(connect_d, buf, 255);
     
-    //printf("data: %s \n", buf);
+    printf("data: %s \n", buf);
     
     player2(enemy, buf);
     
-    if(ball->y < 0 ){
+    if(ball->y < PLAYER_OFFSET + PLATE_HEIGHT ){
         /* Check if the enemy caught the ball */
         if((ball->x >= enemy->x) && ((ball->x + ball->size) <= (enemy->x + PLATE_WIDTH))){
             ball->dy = -(ball->dy);
@@ -335,8 +335,8 @@ void update(Player *player, Player *enemy,  Ball *ball){
         }else{
             /* Enemy missed the ball! */
             player->score++;
-            int delay = 90 * abs(ball->dx) + 700;
-            SDL_Delay(delay);
+            //int delay = 90 * abs(ball->dx) + 700;
+            //SDL_Delay(delay);
             ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
             ball->y = window_height - 22.0 - BALL_SIZE / 2.0;
             
@@ -350,17 +350,18 @@ void update(Player *player, Player *enemy,  Ball *ball){
             ball->dy = -(ball->dy);
             (player->hits)++;
             /* Increase ball speed every fifth hit */
-            if((player->hits % REQUIRED_HITS) == 0 ){
-                //speedUp(ball);
+            if(player->hits == REQUIRED_HITS ){
+                speedUp(ball);
+                player->hits = 0;
             }
         }else {
             /* Player missed the ball! */
             if(player->score > 0){
                 player->score--;
             }
-            int delay = 90 * abs(ball->dx) + 700;
+           // int delay = 90 * abs(ball->dx) + 700;
             
-            SDL_Delay(delay);
+           // SDL_Delay(delay);
             ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
             ball->y = window_height / 5.0 - BALL_SIZE / 2.0;
         }

@@ -19,7 +19,7 @@ int read_in(int d, char *buf, int buflen) {
 }
 
 int say(int socket, char *s){
-  int result = send(socket, s, strlen(s), 0);
+  int result = send(socket, s, strlen(s), 0);  
   return result;
 }
 
@@ -38,7 +38,7 @@ int open_listener_socket(){
 int bind_to_port(int listener, int port){
   struct sockaddr_in name;
   name.sin_family = PF_INET;
-  name.sin_port = (in_port_t)htons(30001);
+  name.sin_port = (in_port_t)htons(DEFAULT_PORT);
   name.sin_addr.s_addr = htonl(INADDR_ANY);
   
   int reuse;

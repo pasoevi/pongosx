@@ -29,7 +29,7 @@
 //#define WINDOW_WIDTH 320
 //#define WINDOW_HEIGHT 480
 #define FPS 70
-#define INITIAL_SPEED 1.1
+#define INITIAL_SPEED 2.1
 #define REQUIRED_HITS 5
 
 #define SCORE_PER_HIT 10
@@ -78,28 +78,17 @@ int HandleThread(void *arg)
 {
     
     while (running) {
-        
-        
-        
         char buff[255];
-        
-        
-        
         sprintf(buff, "%.2f\0", ((Player *)arg)->x);
         
         
         
         say(listener_d, buff);
         // say(listener_d, "180.00\0");
-        SDL_Delay(100);
-        
-        
+        SDL_Delay(20);
         
         
     }
-    
-    
-    
     return 1;
     
 }
@@ -137,37 +126,17 @@ int main(int  argc, char** argv){
   player.y = window_height - PLATE_HEIGHT - PLAYER_OFFSET;
   player.hits = 0;
   player.score = 0;
-
   
-  
-  
-  
-  
-  
-  //int modes = SDL_GetNumDisplayModes(screen);
-  
-    
-  
-  /*
-    for (int i = 0; i < modes; i++) {
-        SDL_DisplayMode mode;
-        SDL_GetDisplayMode(screen, i, &mode);
-        printf("%dx%d\n", mode.w, mode.h);
-   }*/
-  
-  
-  
-
   /* Create the enemy! */
   Player enemy;
   enemy.x = window_width / 2 - PLATE_WIDTH;
-  enemy.y = 0;
+  enemy.y = PLAYER_OFFSET;
   enemy.hits = 0;
   
   Ball ball;
   ball.x = window_width / 2.0 - BALL_SIZE / 2.0;
   ball.y = window_height / 2.0 - BALL_SIZE / 2.0;
-  ball.dx = -INITIAL_SPEED, ball.dy = INITIAL_SPEED;
+  ball.dx = -INITIAL_SPEED, ball.dy = -INITIAL_SPEED;
   ball.size = BALL_SIZE;
   
   
@@ -273,17 +242,21 @@ void update(Player *player, Player *enemy,  Ball *ball){
     
     
     player2(enemy, buf);
-    if(ball->y < 0 ){
+    if(ball->y < PLAYER_OFFSET + PLATE_HEIGHT ){
         /* Check if the enemy caught the ball */
         if((ball->x >= enemy->x) && ((ball->x + ball->size) <= (enemy->x + PLATE_WIDTH))){
             ball->dy = -(ball->dy);
             (enemy->hits)++;
+            /* Increase ball speed every fifth hit */
+            if(player->hits  == REQUIRED_HITS){
+                speedUp(ball);
+                player->hits = 0;
+            }
+
         }else{
             /* Enemy missed the ball! */
             player->score++;
-            int delay = 90 * abs(ball->dx) + 700;
-            SDL_Delay(delay);
-            ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
+                        ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
             ball->y = window_height - 22.0 - BALL_SIZE / 2.0;
             
         }
@@ -295,18 +268,11 @@ void update(Player *player, Player *enemy,  Ball *ball){
             // ball hit the surface of the paddle
             ball->dy = -(ball->dy);
             (player->hits)++;
-            /* Increase ball speed every fifth hit */
-            if((player->hits % REQUIRED_HITS) == 0 ){
-                speedUp(ball);
-            }
-        }else {
+                    }else {
             /* Player missed the ball! */
             if(player->score > 0){
                 player->score--;
             }
-            int delay = 90 * abs(ball->dx) + 700;
-            
-            SDL_Delay(delay);
             ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
             ball->y = window_height / 5.0 - BALL_SIZE / 2.0;
         }

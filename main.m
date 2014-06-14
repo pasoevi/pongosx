@@ -67,7 +67,7 @@ int main(int  argc, char** argv){
   /* Create a player */
   Player player;
   player.x = window_width / 2 - PLATE_WIDTH;
-  player.y = window_height - PLATE_HEIGHT;
+  player.y = window_height - PLATE_HEIGHT - PLAYER_OFFSET;
   player.hits = 0;
   player.score = 0;
 
@@ -120,16 +120,21 @@ void handleEvents(Player *player){
     switch(event.type){
         case SDL_FINGERDOWN:
         case SDL_FINGERMOTION:
-      
-                if (player->x + event.tfinger.dx * WINDOW_WIDTH < 0) {
+            //printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
+            // printf("x: %f, y: %f\ndx: %f, dy: %f\n", event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy);
+            //if(event.tfinger.x * WINDOW_WIDTH >= player->x && event.tfinger.x * WINDOW_WIDTH <= (player->x + PLATE_WIDTH)){
+            
+            
+                if (player->x + event.tfinger.dx * window_width < 0) {
                     player->x = 0;
-                } else if((player->x + PLATE_WIDTH) > WINDOW_WIDTH){
-                    
-                    player->x = WINDOW_WIDTH - PLATE_WIDTH;
+                } else if((player->x + PLATE_WIDTH) > window_width){
+                    printf("X: %f\n", event.tfinger.x * window_width);
+                    //player->x += event.tfinger.dx * WINDOW_WIDTH;
+                    player->x = window_width - PLATE_WIDTH;
                 } else {
                     player->x += event.tfinger.dx * window_width;
                 }
-    
+            //}
             break;
     case SDL_QUIT:
       running = 0;
@@ -185,7 +190,7 @@ void update(Player *player, Player *enemy,  Ball *ball){
     }
   }
   
-  if(ball->y > window_height - ball->size){
+  if(ball->y > window_height - ball->size - PLATE_HEIGHT - PLAYER_OFFSET){
     /* Check if the player caught the ball */
     if((ball->x >= player->x) && ((ball->x + ball->size) <= (player->x + PLATE_WIDTH))){
       ball->dy = -(ball->dy);

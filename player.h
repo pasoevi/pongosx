@@ -19,7 +19,8 @@
 
 */
 #define PLATE_WIDTH 140
-#define PLATE_HEIGHT 14
+#define PLATE_HEIGHT 20
+#define PLAYER_OFFSET 14
 
 typedef struct {
   float x, y;

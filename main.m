@@ -29,7 +29,7 @@
 //#define WINDOW_WIDTH 320
 //#define WINDOW_HEIGHT 480
 #define FPS 70
-#define INITIAL_SPEED 2.1
+#define INITIAL_SPEED 1.5
 #define REQUIRED_HITS 5
 
 #define SCORE_PER_HIT 10
@@ -85,7 +85,7 @@ int HandleThread(void *arg)
         
         say(listener_d, buff);
         // say(listener_d, "180.00\0");
-        SDL_Delay(20);
+        SDL_Delay(5);
         
         
     }

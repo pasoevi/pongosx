@@ -20,6 +20,7 @@
 */
 
 #include "pong.h"
+#include "multiplayer.h"
 
 
 //#import <Foundation/Foundation.h>
@@ -36,6 +37,73 @@
 int running = 1;
 int window_width = 320;
 int window_height = 480;
+
+int listener_d;
+
+typedef struct {
+    
+    Ball *ball;
+    
+    Player *player;
+    
+    Player *enemy;
+    
+} params;
+
+
+
+int UpdateThread(void *arg)
+
+{
+    
+    params *p = (params*)arg;
+    
+    
+    
+    while (running) {
+        
+        update(p->player, p->enemy, p->ball);
+        
+    }
+    
+    
+    
+    return 1;
+    
+}
+
+
+int HandleThread(void *arg)
+
+{
+    
+    
+    
+    
+    
+    while (running) {
+        
+        
+        
+        char buff[255];
+        
+        
+        
+        sprintf(buff, "%f", ((Player *)arg)->x);
+        
+        
+        
+        say(listener_d, buff);
+        
+        
+        
+    }
+    
+    
+    
+    return 1;
+    
+}
 
 int main(int  argc, char** argv){
 
@@ -103,12 +171,34 @@ int main(int  argc, char** argv){
   ball.dx = -INITIAL_SPEED, ball.dy = INITIAL_SPEED;
   ball.size = BALL_SIZE;
   
-  while(running){
-    handleEvents(&player);
-    update(&player, &enemy, &ball);
-    render(renderer, &player, &enemy, &ball);
-  }
-
+  
+    
+    
+    
+    listener_d = socket(PF_INET, SOCK_STREAM, 0);
+    
+    struct sockaddr_in si;
+    memset(&si, 0, sizeof(si));
+    si.sin_family = PF_INET;
+    si.sin_addr.s_addr = inet_addr("192.168.0.108");
+    // si.sin_addr.s_addr = inet_addr(argv[1]);
+    si.sin_port = htons(30001);
+    connect(listener_d, (struct sockaddr*) &si, sizeof(si));
+    params args = { &ball, &player, &enemy };
+    
+    
+    
+    SDL_Thread *updateThread = NULL;
+    
+    updateThread = SDL_CreateThread(UpdateThread, "UpdateThread", &args);
+    SDL_Thread *handleThread = NULL;
+    handleThread = SDL_CreateThread(HandleThread, "HandleThread", &player);
+    
+    while(running){
+        handleEvents(&player);
+        // update(&player, &enemy, &ball);
+        render(renderer, &player, &enemy, &ball);
+    }
   printf("Game Over\nYour Score: %d\n", player.score * SCORE_PER_HIT);
   return 0;
   clean(window, renderer);
@@ -172,8 +262,18 @@ void update(Player *player, Player *enemy,  Ball *ball){
     }
     
     /* Enemy intelligence */
-    think(enemy, ball->x, window_width);
+    // think(enemy, ball->x, window_width);
+    char buf[255];
     
+    read_in(listener_d, buf, 255);
+    
+    
+    
+    //printf("data: %s \n", buf);
+    
+    
+    
+    player2(enemy, buf);
     if(ball->y < 0 ){
         /* Check if the enemy caught the ball */
         if((ball->x >= enemy->x) && ((ball->x + ball->size) <= (enemy->x + PLATE_WIDTH))){

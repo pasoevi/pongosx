@@ -19,6 +19,7 @@
 
 */
 #include "player.h"
+#include <stdio.h>
 
 void think(Player *enemy, int ballX, int winWidth){
   if(ballX > (enemy->x + (PLATE_WIDTH / 2))){
@@ -30,4 +31,18 @@ void think(Player *enemy, int ballX, int winWidth){
       enemy->x -= 3;
     }
   }
+}
+
+void player2(Player *enemy, char *move){
+    
+    
+    float newX;
+    
+    
+    
+    sscanf(move, "%f", &newX);
+    
+    
+    enemy->x = newX;
+    
 }

@@ -29,3 +29,4 @@ typedef struct {
 } Player;
 
 void think(Player*, int, int);
+void player2(Player *enemy, char *move);

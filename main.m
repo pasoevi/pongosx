@@ -167,52 +167,53 @@ void handleEvents(Player *player){
 }
 
 void update(Player *player, Player *enemy,  Ball *ball){
-  if(ball->x < 0 || ball->x > window_width - ball->size){
-    ball->dx = -ball->dx;
-  }
-
-  /* Enemy intelligence */
-  think(enemy, ball->x, window_width);
-  
-  if(ball->y < 0 ){
-    /* Check if the enemy caught the ball */
-    if((ball->x >= enemy->x) && ((ball->x + ball->size) <= (enemy->x + PLATE_WIDTH))){
-      ball->dy = -(ball->dy);
-      (enemy->hits)++;
-    }else{
-      /* Enemy missed the ball! */
-      player->score++;
-      int delay = 90 * abs(ball->dx) + 700;
-      SDL_Delay(delay);
-      ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
-      ball->y = window_height - 22.0 - BALL_SIZE / 2.0;
-
+    if(ball->x < 0 || ball->x > window_width - ball->size){
+        ball->dx = -ball->dx;
     }
-  }
-  
-  if(ball->y > window_height - ball->size - PLATE_HEIGHT - PLAYER_OFFSET){
-    /* Check if the player caught the ball */
-    if((ball->x >= player->x) && ((ball->x + ball->size) <= (player->x + PLATE_WIDTH))){
-      ball->dy = -(ball->dy);
-      (player->hits)++;
-      /* Increase ball speed every fifth hit */
-      if((player->hits % REQUIRED_HITS) == 0 ){
-	speedUp(ball);
-      }
-    }else{
-      /* Player missed the ball! */
-      if(player->score > 0){
-	player->score--;
-      }
-      int delay = 90 * abs(ball->dx) + 700;
-
-      SDL_Delay(delay);
-      ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
-      ball->y = window_height / 5.0 - BALL_SIZE / 2.0;
+    
+    /* Enemy intelligence */
+    think(enemy, ball->x, window_width);
+    
+    if(ball->y < 0 ){
+        /* Check if the enemy caught the ball */
+        if((ball->x >= enemy->x) && ((ball->x + ball->size) <= (enemy->x + PLATE_WIDTH))){
+            ball->dy = -(ball->dy);
+            (enemy->hits)++;
+        }else{
+            /* Enemy missed the ball! */
+            player->score++;
+            int delay = 90 * abs(ball->dx) + 700;
+            SDL_Delay(delay);
+            ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
+            ball->y = window_height - 22.0 - BALL_SIZE / 2.0;
+            
+        }
     }
-  }
-  ball->x += ball->dx;
-  ball->y += ball->dy;
+    
+    if((ball->y + ball->size) > window_height  - PLATE_HEIGHT - PLAYER_OFFSET){
+        /* Check if the player caught the ball */
+        if((ball->x >= player->x) && ((ball->x + ball->size) <= (player->x + PLATE_WIDTH))){
+            // ball hit the surface of the paddle
+            ball->dy = -(ball->dy);
+            (player->hits)++;
+            /* Increase ball speed every fifth hit */
+            if((player->hits % REQUIRED_HITS) == 0 ){
+                speedUp(ball);
+            }
+        }else {
+            /* Player missed the ball! */
+            if(player->score > 0){
+                player->score--;
+            }
+            int delay = 90 * abs(ball->dx) + 700;
+            
+            SDL_Delay(delay);
+            ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
+            ball->y = window_height / 5.0 - BALL_SIZE / 2.0;
+        }
+    }
+    ball->x += ball->dx;
+    ball->y += ball->dy;
 }
 
 void render(SDL_Renderer *renderer, Player *player, Player *enemy, Ball *ball){

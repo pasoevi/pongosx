@@ -92,7 +92,7 @@ void handleEvents(Player *player){
             printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
             // printf("x: %f, y: %f\ndx: %f, dy: %f\n", event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy);
             if(event.tfinger.x * WINDOW_WIDTH >= player->x && event.tfinger.x * WINDOW_WIDTH <= (player->x + PLATE_WIDTH)){
-                if((player->x + PLATE_WIDTH + 2) <= WINDOW_WIDTH){
+                if((player->x - event.tfinger.dy) >= 0 && (player->x + PLATE_WIDTH + event.tfinger.dx) <= WINDOW_WIDTH){
                     printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
                 player->x += event.tfinger.dx * WINDOW_WIDTH;
                 }

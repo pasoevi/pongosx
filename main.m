@@ -67,7 +67,7 @@ int main(int  argc, char** argv){
   /* Create a player */
   Player player;
   player.x = window_width / 2 - PLATE_WIDTH;
-  player.y = window_height - PLATE_HEIGHT;
+  player.y = window_height - PLATE_HEIGHT - PLAYER_OFFSET;
   player.hits = 0;
   player.score = 0;
 
@@ -181,7 +181,7 @@ void update(Player *player, Player *enemy,  Ball *ball){
     }
   }
   
-  if(ball->y > window_height - ball->size){
+  if(ball->y > window_height - ball->size - PLATE_HEIGHT - PLAYER_OFFSET){
     /* Check if the player caught the ball */
     if((ball->x >= player->x) && ((ball->x + ball->size) <= (player->x + PLATE_WIDTH))){
       ball->dy = -(ball->dy);

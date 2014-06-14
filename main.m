@@ -25,8 +25,8 @@
 //#import <Foundation/Foundation.h>
 
 #define WINDOW_TITLE "Pong"
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 960
+//#define WINDOW_WIDTH 320
+//#define WINDOW_HEIGHT 480
 #define FPS 70
 #define INITIAL_SPEED 1.1
 #define REQUIRED_HITS 5
@@ -34,6 +34,8 @@
 #define SCORE_PER_HIT 10
 
 int running = 1;
+int window_width = 320;
+int window_height = 480;
 
 int main(int  argc, char** argv){
 
@@ -41,9 +43,20 @@ int main(int  argc, char** argv){
   SDL_Window *window;
   SDL_Renderer *renderer;
 
+    
+
   if(SDL_Init(SDL_INIT_VIDEO) >= 0){
+  
+    SDL_DisplayMode mode;
+    SDL_GetDisplayMode(0, 0, &mode);
+    //printf("%dx%d\n", mode.w, mode.h);
+    window_width = mode.h;
+    window_height = mode.w;
+  
+    
+  
     window = SDL_CreateWindow(NULL, 0,
-			      0, WINDOW_WIDTH, WINDOW_HEIGHT,
+			      0, window_width, window_height,
 			      SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
   }
 
@@ -53,37 +66,40 @@ int main(int  argc, char** argv){
   }
   /* Create a player */
   Player player;
-  player.x = WINDOW_WIDTH / 2 - PLATE_WIDTH;
-  player.y = WINDOW_HEIGHT - PLATE_HEIGHT;
+  player.x = window_width / 2 - PLATE_WIDTH;
+  player.y = window_height - PLATE_HEIGHT;
   player.hits = 0;
   player.score = 0;
 
   
   
   
+  
+  
+  
+  //int modes = SDL_GetNumDisplayModes(screen);
+  
+    
+  
   /*
-  int screen = 0;
-  
-  int modes = SDL_GetNumDisplayModes(screen);
-  
     for (int i = 0; i < modes; i++) {
         SDL_DisplayMode mode;
         SDL_GetDisplayMode(screen, i, &mode);
         printf("%dx%d\n", mode.w, mode.h);
-    }
-  */
+   }*/
+  
   
   
 
   /* Create the enemy! */
   Player enemy;
-  enemy.x = WINDOW_WIDTH / 2 - PLATE_WIDTH;
+  enemy.x = window_width / 2 - PLATE_WIDTH;
   enemy.y = 0;
   enemy.hits = 0;
   
   Ball ball;
-  ball.x = WINDOW_WIDTH / 2.0 - BALL_SIZE / 2.0;
-  ball.y = WINDOW_HEIGHT / 2.0 - BALL_SIZE / 2.0;
+  ball.x = window_width / 2.0 - BALL_SIZE / 2.0;
+  ball.y = window_height / 2.0 - BALL_SIZE / 2.0;
   ball.dx = -INITIAL_SPEED, ball.dy = INITIAL_SPEED;
   ball.size = BALL_SIZE;
   
@@ -104,19 +120,19 @@ void handleEvents(Player *player){
     switch(event.type){
         case SDL_FINGERDOWN:
         case SDL_FINGERMOTION:
-            printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
+            //printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
             // printf("x: %f, y: %f\ndx: %f, dy: %f\n", event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy);
             //if(event.tfinger.x * WINDOW_WIDTH >= player->x && event.tfinger.x * WINDOW_WIDTH <= (player->x + PLATE_WIDTH)){
             
             
-                if (player->x + event.tfinger.dx * WINDOW_WIDTH < 0) {
+                if (player->x + event.tfinger.dx * window_width < 0) {
                     player->x = 0;
-                } else if((player->x + PLATE_WIDTH) > WINDOW_WIDTH){
-                    printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
+                } else if((player->x + PLATE_WIDTH) > window_width){
+                    printf("X: %f\n", event.tfinger.x * window_width);
                     //player->x += event.tfinger.dx * WINDOW_WIDTH;
-                    player->x = WINDOW_WIDTH - PLATE_WIDTH;
+                    player->x = window_width - PLATE_WIDTH;
                 } else {
-                    player->x += event.tfinger.dx * WINDOW_WIDTH;
+                    player->x += event.tfinger.dx * window_width;
                 }
             //}
             break;
@@ -138,7 +154,7 @@ void handleEvents(Player *player){
 
   const Uint8 *state = SDL_GetKeyboardState(NULL);
   if(state[SDL_SCANCODE_RIGHT]){
-    if((player->x + PLATE_WIDTH + 2) <= WINDOW_WIDTH){
+    if((player->x + PLATE_WIDTH + 2) <= window_width){
       player->x += 3;
     }
   }
@@ -151,12 +167,12 @@ void handleEvents(Player *player){
 }
 
 void update(Player *player, Player *enemy,  Ball *ball){
-  if(ball->x < 0 || ball->x > WINDOW_WIDTH - ball->size){
+  if(ball->x < 0 || ball->x > window_width - ball->size){
     ball->dx = -ball->dx;
   }
 
   /* Enemy intelligence */
-  think(enemy, ball->x, WINDOW_WIDTH);
+  think(enemy, ball->x, window_width);
   
   if(ball->y < 0 ){
     /* Check if the enemy caught the ball */
@@ -168,13 +184,13 @@ void update(Player *player, Player *enemy,  Ball *ball){
       player->score++;
       int delay = 90 * abs(ball->dx) + 700;
       SDL_Delay(delay);
-      ball->x = WINDOW_WIDTH / 2.0 - BALL_SIZE / 2.0;
-      ball->y = WINDOW_HEIGHT - 22.0 - BALL_SIZE / 2.0;
+      ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
+      ball->y = window_height - 22.0 - BALL_SIZE / 2.0;
 
     }
   }
   
-  if(ball->y > WINDOW_HEIGHT - ball->size){
+  if(ball->y > window_height - ball->size){
     /* Check if the player caught the ball */
     if((ball->x >= player->x) && ((ball->x + ball->size) <= (player->x + PLATE_WIDTH))){
       ball->dy = -(ball->dy);
@@ -191,8 +207,8 @@ void update(Player *player, Player *enemy,  Ball *ball){
       int delay = 90 * abs(ball->dx) + 700;
 
       SDL_Delay(delay);
-      ball->x = WINDOW_WIDTH / 2.0 - BALL_SIZE / 2.0;
-      ball->y = WINDOW_HEIGHT / 5.0 - BALL_SIZE / 2.0;
+      ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
+      ball->y = window_height / 5.0 - BALL_SIZE / 2.0;
     }
   }
   ball->x += ball->dx;

@@ -20,7 +20,8 @@
 */
 
 #include "pong.h"
-
+#include "multiplayer.h"
+#include "SDL_thread.h"
 
 //#import <Foundation/Foundation.h>
 
@@ -34,8 +35,46 @@
 #define SCORE_PER_HIT 10
 
 int running = 1;
+int listener_d;
+int connect_d;
 int window_width = 320;
 int window_height = 480;
+
+typedef struct {
+    Ball *ball;
+    Player *player;
+    Player *enemy;
+} params;
+
+
+int UpdateThread(void *arg)
+{
+    params *p = (params*)arg;
+    
+    while (running) {
+        update(p->player, p->enemy, p->ball);
+    }
+    
+    return 1;
+}
+
+int HandleThread(void *arg)
+{
+    while (running) {
+        
+        char buff[255];
+        
+        sprintf(buff, "%f", ((Player *)arg)->x);
+        
+        SDL_Delay(500);
+        
+        say(connect_d, buff);
+        
+    }
+    
+    return 1;
+}
+
 
 int main(int  argc, char** argv){
 
@@ -64,6 +103,91 @@ int main(int  argc, char** argv){
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED |
 				  SDL_RENDERER_PRESENTVSYNC);
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+   
+    
+    int port = argc == 2 ? strtol(argv[1], NULL, 10) : DEFAULT_PORT;
+    
+    listener_d = open_listener_socket();
+    
+    if(listener_d == -1){
+        perror("Can't open the socket");
+        exit(1);
+    }
+    
+    
+    
+    if(bind_to_port(listener_d, port) == -1){
+        perror("Can't bind");
+        exit(2);
+    }
+    
+    if(listen(listener_d, 1) == -1){
+        perror("Can't listen");
+        exit(3);
+    }
+    
+    
+    
+    struct sockaddr_storage client_addr;
+    unsigned int address_size = sizeof(client_addr);
+    //while(running){
+        connect_d = accept(listener_d, (struct sockaddr*) &client_addr, &address_size);
+        if(connect_d == -1){
+            perror("Can't open secondary socked");
+            exit(4);
+        }
+    
+        /*int recived = 1;
+    
+        while(recived){
+    
+            char buf[255];
+            
+            
+            if (read_in(connect_d, buf, 255) > 0) {
+                printf("data: %s \n", buf);
+            
+                recived = 0;
+            }*/
+    
+    
+    
+            
+    
+            //say(connect_d, "sandro");
+            //puts(buf);
+            
+            
+       // }
+        // read_in(listener_d, buf, 20);
+    
+    
+   // }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   /* Create a player */
   Player player;
   player.x = window_width / 2 - PLATE_WIDTH;
@@ -94,16 +218,36 @@ int main(int  argc, char** argv){
   ball.dx = -INITIAL_SPEED, ball.dy = INITIAL_SPEED;
   ball.size = BALL_SIZE;
   
+  params args = { &ball, &player, &enemy };
+  
+  SDL_Thread *updateThread = NULL;
+  
+  updateThread = SDL_CreateThread(UpdateThread, "UpdateThread", &args);
+  
+  
+  
+  SDL_Thread *handleThread = NULL;
+  
+  handleThread = SDL_CreateThread(HandleThread, "HandleThread", &player);
+  
+  
+  
+  
+  
   while(running){
     handleEvents(&player);
-    update(&player, &enemy, &ball);
     render(renderer, &player, &enemy, &ball);
   }
 
   printf("Game Over\nYour Score: %d\n", player.score * SCORE_PER_HIT);
   return 0;
+  
   clean(window, renderer);
 }
+
+
+
+
 
 void handleEvents(Player *player){
   SDL_Event event;
@@ -125,6 +269,14 @@ void handleEvents(Player *player){
                 } else {
                     player->x += event.tfinger.dx * window_width;
                 }
+            
+            
+            
+                /*char buff[255];
+            
+                sprintf(buff, "%f", player->x);
+            
+                say(connect_d, buff);*/
             //}
             break;
     case SDL_QUIT:
@@ -157,13 +309,23 @@ void handleEvents(Player *player){
   }
 }
 
+
+
+
 void update(Player *player, Player *enemy,  Ball *ball){
     if(ball->x < 0 || ball->x > window_width - ball->size){
         ball->dx = -ball->dx;
     }
     
     /* Enemy intelligence */
-    think(enemy, ball->x, window_width);
+    //think(enemy, ball->x, window_width);
+    
+    char buf[255];
+    read_in(connect_d, buf, 255);
+    
+    //printf("data: %s \n", buf);
+    
+    player2(enemy, buf);
     
     if(ball->y < 0 ){
         /* Check if the enemy caught the ball */
@@ -189,7 +351,7 @@ void update(Player *player, Player *enemy,  Ball *ball){
             (player->hits)++;
             /* Increase ball speed every fifth hit */
             if((player->hits % REQUIRED_HITS) == 0 ){
-                speedUp(ball);
+                //speedUp(ball);
             }
         }else {
             /* Player missed the ball! */
@@ -226,6 +388,7 @@ void render(SDL_Renderer *renderer, Player *player, Player *enemy, Ball *ball){
 }
 
 void clean(SDL_Window *window, SDL_Renderer *renderer){
+  close(connect_d);
   SDL_DestroyWindow(window);
   SDL_DestroyRenderer(renderer);
   SDL_Quit();

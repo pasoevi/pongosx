@@ -1,5 +1,5 @@
 /*
-dfdsf
+123333
   Copyright (C) 2014 Sergi Pasoev.
 
   This pragram is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ dfdsf
 
 #define WINDOW_TITLE "Pong"
 #define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 920
+#define WINDOW_HEIGHT 960
 #define FPS 70
 #define INITIAL_SPEED 1.1
 #define REQUIRED_HITS 5
@@ -44,7 +44,7 @@ int main(int  argc, char** argv){
   if(SDL_Init(SDL_INIT_VIDEO) >= 0){
     window = SDL_CreateWindow(NULL, 0,
 			      0, WINDOW_WIDTH, WINDOW_HEIGHT,
-			      SDL_WINDOW_OPENGL);
+			      SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
   }
 
   if(window != 0){
@@ -58,7 +58,22 @@ int main(int  argc, char** argv){
   player.hits = 0;
   player.score = 0;
 
-
+  
+  
+  
+  /*
+  int screen = 0;
+  
+  int modes = SDL_GetNumDisplayModes(screen);
+  
+    for (int i = 0; i < modes; i++) {
+        SDL_DisplayMode mode;
+        SDL_GetDisplayMode(screen, i, &mode);
+        printf("%dx%d\n", mode.w, mode.h);
+    }
+  */
+  
+  
 
   /* Create the enemy! */
   Player enemy;
@@ -85,7 +100,7 @@ int main(int  argc, char** argv){
 
 void handleEvents(Player *player){
   SDL_Event event;
-  if(SDL_PollEvent(&event)){
+  while(SDL_PollEvent(&event)){
     switch(event.type){
         case SDL_FINGERDOWN:
         case SDL_FINGERMOTION:
@@ -94,9 +109,12 @@ void handleEvents(Player *player){
             if(event.tfinger.x * WINDOW_WIDTH >= player->x && event.tfinger.x * WINDOW_WIDTH <= (player->x + PLATE_WIDTH)){
                 if((player->x - event.tfinger.dy) >= 0 && (player->x + PLATE_WIDTH + event.tfinger.dx) <= WINDOW_WIDTH){
                     printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
-                player->x += event.tfinger.dx * WINDOW_WIDTH;
+                    //player->x += event.tfinger.dx * WINDOW_WIDTH;
+                    player->x = WINDOW_WIDTH - PLATE_WIDTH;
+                } else {
+                    player->x += event.tfinger.dx * WINDOW_WIDTH;
                 }
-            }
+            //}
             break;
     case SDL_QUIT:
       running = 0;
@@ -110,7 +128,7 @@ void handleEvents(Player *player){
 	running = 0;
 	break;
       }
-      break;
+      break;    
     }
   }
 

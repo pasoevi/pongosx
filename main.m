@@ -106,12 +106,19 @@ void handleEvents(Player *player){
         case SDL_FINGERMOTION:
             printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
             // printf("x: %f, y: %f\ndx: %f, dy: %f\n", event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy);
-            if(event.tfinger.x * WINDOW_WIDTH >= player->x && event.tfinger.x * WINDOW_WIDTH <= (player->x + PLATE_WIDTH)){
-                if((player->x + PLATE_WIDTH + 2) <= WINDOW_WIDTH){
+            //if(event.tfinger.x * WINDOW_WIDTH >= player->x && event.tfinger.x * WINDOW_WIDTH <= (player->x + PLATE_WIDTH)){
+            
+            
+                if (player->x + event.tfinger.dx * WINDOW_WIDTH < 0) {
+                    player->x = 0;
+                } else if((player->x + PLATE_WIDTH) > WINDOW_WIDTH){
                     printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
-                player->x += event.tfinger.dx * WINDOW_WIDTH;
+                    //player->x += event.tfinger.dx * WINDOW_WIDTH;
+                    player->x = WINDOW_WIDTH - PLATE_WIDTH;
+                } else {
+                    player->x += event.tfinger.dx * WINDOW_WIDTH;
                 }
-            }
+            //}
             break;
     case SDL_QUIT:
       running = 0;

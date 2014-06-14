@@ -77,16 +77,7 @@ int main(int  argc, char** argv){
   
   
   
-  //int modes = SDL_GetNumDisplayModes(screen);
-  
-    
-  
-  /*
-    for (int i = 0; i < modes; i++) {
-        SDL_DisplayMode mode;
-        SDL_GetDisplayMode(screen, i, &mode);
-        printf("%dx%d\n", mode.w, mode.h);
-   }*/
+
   
   
   

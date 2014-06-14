@@ -26,7 +26,7 @@
 
 #define WINDOW_TITLE "Pong"
 #define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 920
+#define WINDOW_HEIGHT 960
 #define FPS 70
 #define INITIAL_SPEED 1.1
 #define REQUIRED_HITS 5
@@ -44,7 +44,7 @@ int main(int  argc, char** argv){
   if(SDL_Init(SDL_INIT_VIDEO) >= 0){
     window = SDL_CreateWindow(NULL, 0,
 			      0, WINDOW_WIDTH, WINDOW_HEIGHT,
-			      SDL_WINDOW_OPENGL);
+			      SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
   }
 
   if(window != 0){
@@ -58,6 +58,20 @@ int main(int  argc, char** argv){
   player.hits = 0;
   player.score = 0;
 
+  
+  
+  
+  /*
+  int screen = 0;
+  
+  int modes = SDL_GetNumDisplayModes(screen);
+  
+    for (int i = 0; i < modes; i++) {
+        SDL_DisplayMode mode;
+        SDL_GetDisplayMode(screen, i, &mode);
+        printf("%dx%d\n", mode.w, mode.h);
+    }
+  */
   
   
 
@@ -86,7 +100,7 @@ int main(int  argc, char** argv){
 
 void handleEvents(Player *player){
   SDL_Event event;
-  if(SDL_PollEvent(&event)){
+  while(SDL_PollEvent(&event)){
     switch(event.type){
     case SDL_QUIT:
       running = 0;
@@ -100,7 +114,7 @@ void handleEvents(Player *player){
 	running = 0;
 	break;
       }
-      break;
+      break;    
     }
   }
 

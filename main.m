@@ -23,7 +23,6 @@
 #include "multiplayer.h"
 #include "SDL_thread.h"
 
-
 //#import <Foundation/Foundation.h>
 
 #define WINDOW_TITLE "Pong"

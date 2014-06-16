@@ -10,7 +10,7 @@
 #include <signal.h>
 
 #define DEFAULT_PORT 30001
-#define SERVER 1
+#define SERVER 0
 
 int read_in(int d, char *buf, int buflen);
 int say(int socket, char *s);

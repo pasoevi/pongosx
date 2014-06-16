@@ -77,12 +77,18 @@ int HandleThread(void *arg)
     while (running) {
         char buff[255];
         sprintf(buff, "%.2f\0", ((Player *)arg)->x);
+        if(!stateChanged) {
+            continue;
+        }
         
         
-        if(SERVER){
-        say(connect_d, buff);
-        }else{
-            say(listener_d, buff);        }
+        if (SERVER) {
+            say(connect_d, buff);
+        } else {
+            say(listener_d, buff);
+        }
+        
+        
         // say(listener_d, "180.00\0");
         SDL_Delay(5);
         
@@ -91,6 +97,7 @@ int HandleThread(void *arg)
     return 1;
     
 }
+int stateChanged = 1;
 
 int main(int  argc, char** argv){
 
@@ -216,7 +223,7 @@ void handleEvents(Player *player){
     switch(event.type){
         case SDL_FINGERDOWN:
         case SDL_FINGERMOTION:
-                          if (player->x + event.tfinger.dx * window_width < 0) {
+                if (player->x + event.tfinger.dx * window_width < 0) {
                     player->x = 0;
                 } else if((player->x + PLATE_WIDTH) > window_width){
                     printf("X: %f\n", event.tfinger.x * window_width);
@@ -225,7 +232,11 @@ void handleEvents(Player *player){
                 } else {
                     player->x += event.tfinger.dx * window_width;
                 }
+            stateChanged = 1;
         break;
+        case SDL_FINGERUP:
+            stateChanged = 0;
+            break;
     case SDL_QUIT:
       running = 0;
       break;   
@@ -265,10 +276,13 @@ void update(Player *player, Player *enemy,  Ball *ball){
     // think(enemy, ball->x, window_width);
     char buf[255];
     
-    if(SERVER){
-        read_in(connect_d, buf, 255);
-    }else{
-        read_in(listener_d, buf, 255);    }
+    if (SERVER) {
+       read_in(connect_d, buf, 255);
+    } else {
+       read_in(listener_d, buf, 255);
+    }
+    
+    
     
     player2(enemy, buf);
     if(ball->y < PLAYER_OFFSET + PLATE_HEIGHT ){

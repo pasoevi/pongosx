@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <signal.h>
 
+#define SERVER 1
+#define DEFAULT_PORT 30001
+
 int read_in(int d, char *buf, int buflen);
 int say(int socket, char *s);
 int catch_signal(int sig, void (*handler)(int));

@@ -37,6 +37,7 @@ int window_width = 320;
 int window_height = 480;
 
 int listener_d;
+int connect_d;
 
 typedef struct {
     
@@ -140,6 +141,7 @@ int main(int  argc, char** argv){
   
     
     
+    if(!SERVER){
     
     listener_d = socket(PF_INET, SOCK_STREAM, 0);
     
@@ -150,6 +152,39 @@ int main(int  argc, char** argv){
     // si.sin_addr.s_addr = inet_addr(argv[1]);
     si.sin_port = htons(30001);
     connect(listener_d, (struct sockaddr*) &si, sizeof(si));
+        
+    }else{
+        int port = argc == 2 ? strtol(argv[1], NULL, 10) : DEFAULT_PORT;
+        listener_d = open_listener_socket();
+        
+        if(listener_d == -1){
+            perror("Can't open the socket");
+            exit(1);
+        }
+        
+        
+        
+        if(bind_to_port(listener_d, port) == -1){
+            perror("Can't bind");
+            exit(2);
+        }
+        
+        if(listen(listener_d, 1) == -1){
+            perror("Can't listen");
+            exit(3);
+        }
+        
+        
+        
+        struct sockaddr_storage client_addr;
+        unsigned int address_size = sizeof(client_addr);
+        //while(running){
+        connect_d = accept(listener_d, (struct sockaddr*) &client_addr, &address_size);
+        if(connect_d == -1){
+            perror("Can't open secondary socked");
+            exit(4);
+        }
+    }
     params args = { &ball, &player, &enemy };
     
     

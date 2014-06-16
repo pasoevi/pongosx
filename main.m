@@ -137,14 +137,10 @@ int main(int  argc, char** argv){
   ball.x = window_width / 2.0 - BALL_SIZE / 2.0;
   ball.y = window_height / 2.0 - BALL_SIZE / 2.0;
   ball.size = BALL_SIZE;
+  ball.dx = -INITIAL_SPEED;
+  ball.dy = !SERVER ? -INITIAL_SPEED : INITIAL_SPEED;
   
-  
-  
-    if (!SERVER) {
-        ball.dx = -INITIAL_SPEED, ball.dy = -INITIAL_SPEED;
-    } else {
-        ball.dx = -INITIAL_SPEED, ball.dy = INITIAL_SPEED;
-    }
+   
   
     
     

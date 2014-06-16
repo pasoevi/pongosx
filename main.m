@@ -33,7 +33,7 @@
 int running = 1;
 int window_width = 320;
 int window_height = 480;
-
+int stateChanged = 1;
 int listener_d;
 int connect_d;
 
@@ -73,31 +73,53 @@ int UpdateThread(void *arg)
 int HandleThread(void *arg)
 
 {
+    SDL_mutex *mutex;
     
-    while (running) {
-        char buff[255];
-        sprintf(buff, "%.2f\0", ((Player *)arg)->x);
-        if(!stateChanged) {
-            continue;
-        }
-        
-        
-        if (SERVER) {
-            say(connect_d, buff);
-        } else {
-            say(listener_d, buff);
-        }
-        
-        
-        // say(listener_d, "180.00\0");
-        SDL_Delay(5);
-        
-        
+    mutex = SDL_CreateMutex();
+    
+    if (!mutex) {
+        return 1;
     }
+    
+    //if (SDL_LockMutex(mutex) == 0) {
+        while (running) {
+        
+            if (SDL_LockMutex(mutex) == 0) {
+            
+                char buff[255];
+            
+                sprintf(buff, "%.2f\0", ((Player *)arg)->x);
+            
+                if(!stateChanged) {
+                    continue;
+                }
+            
+            
+                if (SERVER) {
+                    say(connect_d, buff);
+                } else {
+                say(listener_d, buff);
+                }
+            
+                SDL_UnlockMutex(mutex);
+                
+                // say(listener_d, "180.00\0");
+                SDL_Delay(5);
+                                
+            }
+            
+        }
+        
+        //SDL_UnlockMutex(mutex);
+    //}
+    
+    SDL_DestroyMutex(mutex);
+    
+    
     return 1;
     
 }
-int stateChanged = 1;
+
 
 int main(int  argc, char** argv){
 
@@ -205,6 +227,7 @@ int main(int  argc, char** argv){
     
     updateThread = SDL_CreateThread(UpdateThread, "UpdateThread", &args);
     SDL_Thread *handleThread = NULL;
+    
     handleThread = SDL_CreateThread(HandleThread, "HandleThread", &player);
     
     while(running){

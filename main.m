@@ -27,7 +27,7 @@
 
 #define WINDOW_TITLE "Pong"
 #define FPS 70
-#define INITIAL_SPEED 2.5
+#define INITIAL_SPEED 2.0
 #define REQUIRED_HITS 5
 
 #define SCORE_PER_HIT 10
@@ -81,8 +81,10 @@ int HandleThread(void *arg)
         sprintf(buff, "%.2f\0", ((Player *)arg)->x);
         
         
-        
+        if(SERVER){
         say(connect_d, buff);
+        }else{
+            say(listener_d, buff);        }
         // say(listener_d, "180.00\0");
         SDL_Delay(5);
         
@@ -184,7 +186,7 @@ int main(int  argc, char** argv){
         si.sin_family = PF_INET;
         si.sin_addr.s_addr = inet_addr("192.168.0.108");
         // si.sin_addr.s_addr = inet_addr(argv[1]);
-        si.sin_port = htons(30001);
+        si.sin_port = htons(DEFAULT_PORT);
         connect(listener_d, (struct sockaddr*) &si, sizeof(si));
 
         //
@@ -265,7 +267,10 @@ void update(Player *player, Player *enemy,  Ball *ball){
     // think(enemy, ball->x, window_width);
     char buf[255];
     
-    read_in(connect_d, buf, 255);
+    if(SERVER){
+        read_in(connect_d, buf, 255);
+    }else{
+        read_in(listener_d, buf, 255);    }
     
     player2(enemy, buf);
     if(ball->y < PLAYER_OFFSET + PLATE_HEIGHT ){

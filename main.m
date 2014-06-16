@@ -21,6 +21,7 @@
 
 #include "pong.h"
 #include "multiplayer.h"
+#include "SDL_thread.h"
 
 
 //#import <Foundation/Foundation.h>
@@ -141,19 +142,7 @@ int main(int  argc, char** argv){
   
     
     
-    if(!SERVER){
-    
-    listener_d = socket(PF_INET, SOCK_STREAM, 0);
-    
-    struct sockaddr_in si;
-    memset(&si, 0, sizeof(si));
-    si.sin_family = PF_INET;
-    si.sin_addr.s_addr = inet_addr("192.168.0.108");
-    // si.sin_addr.s_addr = inet_addr(argv[1]);
-    si.sin_port = htons(30001);
-    connect(listener_d, (struct sockaddr*) &si, sizeof(si));
-        
-    }else{
+    if(SERVER){
         int port = argc == 2 ? strtol(argv[1], NULL, 10) : DEFAULT_PORT;
         listener_d = open_listener_socket();
         
@@ -178,13 +167,27 @@ int main(int  argc, char** argv){
         
         struct sockaddr_storage client_addr;
         unsigned int address_size = sizeof(client_addr);
-        //while(running){
+        
         connect_d = accept(listener_d, (struct sockaddr*) &client_addr, &address_size);
         if(connect_d == -1){
             perror("Can't open secondary socked");
             exit(4);
         }
-    }
+        
+    }else{
+        listener_d = socket(PF_INET, SOCK_STREAM, 0);
+        
+        struct sockaddr_in si;
+        memset(&si, 0, sizeof(si));
+        si.sin_family = PF_INET;
+        si.sin_addr.s_addr = inet_addr("192.168.0.108");
+        // si.sin_addr.s_addr = inet_addr(argv[1]);
+        si.sin_port = htons(30001);
+        connect(listener_d, (struct sockaddr*) &si, sizeof(si));
+
+        //
+        
+            }
     params args = { &ball, &player, &enemy };
     
     
@@ -211,12 +214,7 @@ void handleEvents(Player *player){
     switch(event.type){
         case SDL_FINGERDOWN:
         case SDL_FINGERMOTION:
-            //printf("X: %f\n", event.tfinger.x * WINDOW_WIDTH);
-            // printf("x: %f, y: %f\ndx: %f, dy: %f\n", event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy);
-            //if(event.tfinger.x * WINDOW_WIDTH >= player->x && event.tfinger.x * WINDOW_WIDTH <= (player->x + PLATE_WIDTH)){
-            
-            
-                if (player->x + event.tfinger.dx * window_width < 0) {
+                          if (player->x + event.tfinger.dx * window_width < 0) {
                     player->x = 0;
                 } else if((player->x + PLATE_WIDTH) > window_width){
                     printf("X: %f\n", event.tfinger.x * window_width);
@@ -225,8 +223,7 @@ void handleEvents(Player *player){
                 } else {
                     player->x += event.tfinger.dx * window_width;
                 }
-            //}
-            break;
+        break;
     case SDL_QUIT:
       running = 0;
       break;   
@@ -267,13 +264,6 @@ void update(Player *player, Player *enemy,  Ball *ball){
     char buf[255];
     
     read_in(listener_d, buf, 255);
-    
-    
-    
-    // printf("RAW: %s\n", buf);
-    
-    
-    // printf("Int: %d\n", x);
     
     player2(enemy, buf);
     if(ball->y < PLAYER_OFFSET + PLATE_HEIGHT ){

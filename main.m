@@ -29,7 +29,7 @@
 //#define WINDOW_WIDTH 320
 //#define WINDOW_HEIGHT 480
 #define FPS 70
-#define INITIAL_SPEED 1.5
+#define INITIAL_SPEED 2.5
 #define REQUIRED_HITS 5
 
 #define SCORE_PER_HIT 10
@@ -39,6 +39,7 @@ int listener_d;
 int connect_d;
 int window_width = 320;
 int window_height = 480;
+int can_send = 0;
 
 typedef struct {
     Ball *ball;
@@ -62,14 +63,17 @@ int HandleThread(void *arg)
 {
     while (running) {
         
-        char buff[255];
-        
-        sprintf(buff, "%.2f\0", ((Player *)arg)->x);
-        
-        SDL_Delay(5);
-        
-        say(connect_d, buff);
-        
+        if (can_send) {
+            char buff[255];
+            
+            sprintf(buff, "%.2f\0", ((Player *)arg)->x);
+            
+            //SDL_Delay(5);
+            
+            say(connect_d, buff);
+            
+            can_send = 0;
+        }
     }
     
     return 1;
@@ -323,7 +327,7 @@ void update(Player *player, Player *enemy,  Ball *ball){
     char buf[255];
     read_in(connect_d, buf, 255);
     
-    printf("data: %s \n", buf);
+    printf("data: %i \n", atoi(buf));
     
     player2(enemy, buf);
     
@@ -338,8 +342,9 @@ void update(Player *player, Player *enemy,  Ball *ball){
             //int delay = 90 * abs(ball->dx) + 700;
             //SDL_Delay(delay);
             ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
-            ball->y = window_height - 22.0 - BALL_SIZE / 2.0;
-            
+            ball->y = window_height / 2.0 - BALL_SIZE / 2.0;
+            ball->dx = -INITIAL_SPEED;
+            ball->dy = INITIAL_SPEED;
         }
     }
     
@@ -351,7 +356,7 @@ void update(Player *player, Player *enemy,  Ball *ball){
             (player->hits)++;
             /* Increase ball speed every fifth hit */
             if(player->hits == REQUIRED_HITS ){
-                speedUp(ball);
+                //speedUp(ball);
                 player->hits = 0;
             }
         }else {
@@ -359,11 +364,16 @@ void update(Player *player, Player *enemy,  Ball *ball){
             if(player->score > 0){
                 player->score--;
             }
+            
+            
+            
            // int delay = 90 * abs(ball->dx) + 700;
             
            // SDL_Delay(delay);
             ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
-            ball->y = window_height / 5.0 - BALL_SIZE / 2.0;
+            ball->y = window_height / 2.0 - BALL_SIZE / 2.0;
+            ball->dx = -INITIAL_SPEED;
+            ball->dy = INITIAL_SPEED;
         }
     }
     ball->x += ball->dx;

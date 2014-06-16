@@ -140,11 +140,15 @@ int main(int  argc, char** argv){
   
   
   
+    if (!SERVER) {
+        ball.dx = -INITIAL_SPEED, ball.dy = -INITIAL_SPEED;
+    } else {
+        ball.dx = -INITIAL_SPEED, ball.dy = INITIAL_SPEED;
+    }
+  
     
     
     if(!SERVER){
-    
-    ball.dx = -INITIAL_SPEED, ball.dy = -INITIAL_SPEED;
     
     listener_d = socket(PF_INET, SOCK_STREAM, 0);
     
@@ -157,8 +161,6 @@ int main(int  argc, char** argv){
     connect(listener_d, (struct sockaddr*) &si, sizeof(si));
         
     } else {
-    
-        ball.dx = -INITIAL_SPEED, ball.dy = INITIAL_SPEED;
     
         int port = argc == 2 ? strtol(argv[1], NULL, 10) : DEFAULT_PORT;
         listener_d = open_listener_socket();

@@ -21,7 +21,7 @@
 
 #include "pong.h"
 #include "multiplayer.h"
-
+#include "SDL_thread.h"
 
 //#import <Foundation/Foundation.h>
 
@@ -82,7 +82,7 @@ int HandleThread(void *arg)
         
         
         
-        say(listener_d, buff);
+        say(connect_d, buff);
         // say(listener_d, "180.00\0");
         SDL_Delay(5);
         
@@ -119,6 +119,7 @@ int main(int  argc, char** argv){
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED |
 				  SDL_RENDERER_PRESENTVSYNC);
   }
+  
   /* Create a player */
   Player player;
   player.x = window_width / 2 - PLATE_WIDTH;
@@ -135,13 +136,15 @@ int main(int  argc, char** argv){
   Ball ball;
   ball.x = window_width / 2.0 - BALL_SIZE / 2.0;
   ball.y = window_height / 2.0 - BALL_SIZE / 2.0;
-  ball.dx = -INITIAL_SPEED, ball.dy = -INITIAL_SPEED;
   ball.size = BALL_SIZE;
+  
   
   
     
     
     if(!SERVER){
+    
+    ball.dx = -INITIAL_SPEED, ball.dy = -INITIAL_SPEED;
     
     listener_d = socket(PF_INET, SOCK_STREAM, 0);
     
@@ -150,10 +153,13 @@ int main(int  argc, char** argv){
     si.sin_family = PF_INET;
     si.sin_addr.s_addr = inet_addr("192.168.0.108");
     // si.sin_addr.s_addr = inet_addr(argv[1]);
-    si.sin_port = htons(30001);
+    si.sin_port = htons(DEFAULT_PORT);
     connect(listener_d, (struct sockaddr*) &si, sizeof(si));
         
-    }else{
+    } else {
+    
+        ball.dx = -INITIAL_SPEED, ball.dy = INITIAL_SPEED;
+    
         int port = argc == 2 ? strtol(argv[1], NULL, 10) : DEFAULT_PORT;
         listener_d = open_listener_socket();
         
@@ -266,7 +272,7 @@ void update(Player *player, Player *enemy,  Ball *ball){
     // think(enemy, ball->x, window_width);
     char buf[255];
     
-    read_in(listener_d, buf, 255);
+    read_in(connect_d, buf, 255);
     
     
     

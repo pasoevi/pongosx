@@ -37,7 +37,9 @@ void player2(Player *enemy, char *move){
     // int newX;
     
     // sscanf(move, "%f", &newX);
+    
     int newX = atoi(move);
+    
     printf("Int: %d\n", newX);
     enemy->x = newX;
     

@@ -35,9 +35,14 @@ void think(Player *enemy, int ballX, int winWidth){
 
 void player2(Player *enemy, char *move){
 
-    float newX;
+    int newX;
     
-    sscanf(move, "%f", &newX);
+    newX = atoi(move);
+    
+    
+    printf("data: %d \n", newX);
+    
+    //sscanf(atoi(move), "%i", &newX);
 
     //printf("data: %s \n", move);
 

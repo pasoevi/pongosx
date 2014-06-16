@@ -18,7 +18,7 @@
 		3D0E898D194B496100569D0F /* ball.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D0E8989194B496100569D0F /* ball.c */; };
 		3D0E898E194B496100569D0F /* enemy.c in Sources */ = {isa = PBXBuildFile; fileRef = 3D0E898B194B496100569D0F /* enemy.c */; };
 		3D0E899B194B4EFC00569D0F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D0E899A194B4EFC00569D0F /* main.m */; };
-		3DF9DAB8194C883200D9BB1C /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DF9DAB6194C883200D9BB1C /* server.c */; };
+		3DA05BE4194ED55200ED296C /* multiplayer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3DA05BE3194ED55200ED296C /* multiplayer.c */; };
 		FD779EDE0E26BA1200F39101 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD779EDD0E26BA1200F39101 /* CoreAudio.framework */; };
 		FD77A07D0E26BD8C00F39101 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FD77A07C0E26BD8C00F39101 /* Icon.png */; };
 		FD77A07F0E26BDA900F39101 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = FD77A07E0E26BDA900F39101 /* Default.png */; };
@@ -117,8 +117,8 @@
 		3D0E898C194B496100569D0F /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
 		3D0E898F194B49BB00569D0F /* pong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pong.h; sourceTree = "<group>"; };
 		3D0E899A194B4EFC00569D0F /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3DA05BE3194ED55200ED296C /* multiplayer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = multiplayer.c; sourceTree = "<group>"; };
 		3DF9DAB5194C883200D9BB1C /* multiplayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = multiplayer.h; sourceTree = "<group>"; };
-		3DF9DAB6194C883200D9BB1C /* server.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = server.c; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FD779EDD0E26BA1200F39101 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		FD77A07C0E26BD8C00F39101 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
@@ -309,8 +309,8 @@
 		3DF9DAB3194C880C00D9BB1C /* Net */ = {
 			isa = PBXGroup;
 			children = (
+				3DA05BE3194ED55200ED296C /* multiplayer.c */,
 				3DF9DAB5194C883200D9BB1C /* multiplayer.h */,
-				3DF9DAB6194C883200D9BB1C /* server.c */,
 			);
 			name = Net;
 			sourceTree = "<group>";
@@ -384,7 +384,7 @@
 			files = (
 				3D0E899B194B4EFC00569D0F /* main.m in Sources */,
 				3D0E898E194B496100569D0F /* enemy.c in Sources */,
-				3DF9DAB8194C883200D9BB1C /* server.c in Sources */,
+				3DA05BE4194ED55200ED296C /* multiplayer.c in Sources */,
 				3D0E898D194B496100569D0F /* ball.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

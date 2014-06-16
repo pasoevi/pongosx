@@ -39,7 +39,7 @@ int listener_d;
 int connect_d;
 int window_width = 320;
 int window_height = 480;
-int can_send = 0;
+
 
 typedef struct {
     Ball *ball;
@@ -63,17 +63,14 @@ int HandleThread(void *arg)
 {
     while (running) {
         
-        if (can_send) {
-            char buff[255];
-            
-            sprintf(buff, "%.2f\0", ((Player *)arg)->x);
-            
-            //SDL_Delay(5);
-            
-            say(connect_d, buff);
-            
-            can_send = 0;
-        }
+        char buff[255];
+        
+        sprintf(buff, "%.2f\0", ((Player *)arg)->x);
+        
+        SDL_Delay(5);
+        
+        say(connect_d, buff);
+        
     }
     
     return 1;
@@ -327,7 +324,7 @@ void update(Player *player, Player *enemy,  Ball *ball){
     char buf[255];
     read_in(connect_d, buf, 255);
     
-    printf("data: %i \n", atoi(buf));
+    //printf("data: %i \n", atoi(buf));
     
     player2(enemy, buf);
     

@@ -296,7 +296,8 @@ void update(Player *player, Player *enemy,  Ball *ball){
             player->score++;
             ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
             ball->y = window_height / 2.0 - BALL_SIZE / 2.0;
-            ball->dx = -INITIAL_SPEED, ball->dy = -INITIAL_SPEED;
+            ball->dx = -INITIAL_SPEED;
+            ball->dy = !SERVER ? -INITIAL_SPEED : INITIAL_SPEED;
             
         }
     }
@@ -314,7 +315,9 @@ void update(Player *player, Player *enemy,  Ball *ball){
             }
             ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
             ball->y = window_height / 2.0 - BALL_SIZE / 2.0;
-            ball->dx = -INITIAL_SPEED, ball->dy = -INITIAL_SPEED;
+            ball->dx = -INITIAL_SPEED;
+            ball->dy = !SERVER ? -INITIAL_SPEED : INITIAL_SPEED;
+            
                         
         }
     }

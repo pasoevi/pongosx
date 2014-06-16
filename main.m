@@ -23,8 +23,6 @@
 #include "multiplayer.h"
 #include "SDL_thread.h"
 
-//#import <Foundation/Foundation.h>
-
 #define WINDOW_TITLE "Pong"
 #define FPS 70
 #define INITIAL_SPEED 2.0

@@ -26,10 +26,8 @@
 //#import <Foundation/Foundation.h>
 
 #define WINDOW_TITLE "Pong"
-//#define WINDOW_WIDTH 320
-//#define WINDOW_HEIGHT 480
 #define FPS 70
-#define INITIAL_SPEED 1.5
+#define INITIAL_SPEED 2.5
 #define REQUIRED_HITS 5
 
 #define SCORE_PER_HIT 10
@@ -237,9 +235,10 @@ void update(Player *player, Player *enemy,  Ball *ball){
     
     
     
-    printf("data: %s \n", buf);
+    // printf("RAW: %s\n", buf);
     
     
+    // printf("Int: %d\n", x);
     
     player2(enemy, buf);
     if(ball->y < PLAYER_OFFSET + PLATE_HEIGHT ){
@@ -249,15 +248,16 @@ void update(Player *player, Player *enemy,  Ball *ball){
             (enemy->hits)++;
             /* Increase ball speed every fifth hit */
             if(player->hits  == REQUIRED_HITS){
-                speedUp(ball);
+                // speedUp(ball);
                 player->hits = 0;
             }
 
         }else{
             /* Enemy missed the ball! */
             player->score++;
-                        ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
-            ball->y = window_height - 22.0 - BALL_SIZE / 2.0;
+            ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
+            ball->y = window_height / 2.0 - BALL_SIZE / 2.0;
+            ball->dx = -INITIAL_SPEED, ball->dy = -INITIAL_SPEED;
             
         }
     }
@@ -274,7 +274,9 @@ void update(Player *player, Player *enemy,  Ball *ball){
                 player->score--;
             }
             ball->x = window_width / 2.0 - BALL_SIZE / 2.0;
-            ball->y = window_height / 5.0 - BALL_SIZE / 2.0;
+            ball->y = window_height / 2.0 - BALL_SIZE / 2.0;
+            ball->dx = -INITIAL_SPEED, ball->dy = -INITIAL_SPEED;
+                        
         }
     }
     ball->x += ball->dx;
